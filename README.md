@@ -4,10 +4,11 @@
 	3. Then sysops runs it on stage/prod based on ticket status.
 	
 ## Proposed Release Process:
-### Summary: To have a git repostory for database changes. developer can add sql file there with PRs and create jenkins jobs to run sql queries on servers. We can run sql queries through shell scripts(done a POC on that) so It should be doable through jenkins jobs as well.
-	   - Commit new sql files in respective pre-deploy/post-deploy under respective release folder in new branch
-	   - Get PR approved and merge
-	   - Use pre-deploy/post-deploy jenkins jobs to execute sql files on server databases.
+#### Summary:
+	We will have a git repository for database changes. developer can add sql file there with PRs and use jenkins jobs to run sql queries on servers. We can run sql queries through shell scripts(done a POC on that) so It should be doable through jenkins jobs as well.
+	   1. Commit new sql files in respective pre-deploy/post-deploy under respective release folder in new branch
+	   2. Get PR approved and merge
+	   3. Use pre-deploy/post-deploy jenkins jobs to execute sql files on server databases.
 
 ## Code hierarchy example 
 	database-deploy
