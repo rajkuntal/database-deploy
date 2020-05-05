@@ -26,7 +26,8 @@ Jenkins Jobs:
 	Same process applies for rapid release and hot-fix.
 
 2. database-deploy: This job is to deploy pre-deploy/post-deploy sql files on a server database. It has two params 1. release-type 2. branch to be deployed.
-	A. Git checks out given branch to be deployed 
+
+	A. Git checks out given branch to be deployed
 	B. Pick the release version from version.properties based on release-type
 	C. Look for the release version folder then check the status in status.properties inside the pre-deploy/post-deploy 	       folder. Since changes can be deployed multiple times on team/qa/stage servers so status check will happen only in 	    production release job.
 	D. If prod job & status is not completed OR non-prod job then run sql files one by one in following steps
