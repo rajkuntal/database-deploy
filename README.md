@@ -1,4 +1,15 @@
-## Code hierarchy 
+## Current Release Process:
+	1. Developer creates database jira ticket & tags it with #Database #pre-deploy/#post-deploy
+	2. Ask sysops team to run sql query on QA when it's ready for QA.
+	3. Then sysops runs it on stage/prod based on ticket status.
+	
+## Proposed Release Process:
+### Summary: To have a git repostory for database changes. developer can add sql file there with PRs and create jenkins jobs to run sql queries on servers. We can run sql queries through shell scripts(done a POC on that) so It should be doable through jenkins jobs as well.
+	   - Commit new sql files in respective pre-deploy/post-deploy under respective release folder in new branch
+	   - Get PR approved and merge
+	   - Use pre-deploy/post-deploy jenkins jobs to execute sql files on server databases.
+
+## Code hierarchy example 
 	database-deploy
 		262
 		262.4
@@ -10,10 +21,9 @@
 			pre-deploy
 				GROWTH-1234.sql
 				TRADE-3798.sql
-				status.properties
 			post-deploy
-				SELLERTOOLS-6590.sql
-				status.properties
+				GROWTH-1234.sql
+			status.txt
 		version.txt
 		rapid-version.txt
 		hotfix-version.txt
@@ -34,20 +44,18 @@
 
 	A. Git check out given branch in job params
 	B. Pick the release version from *.properties file based on release-type. 
-	C. Look for the release version folder then check the status in status.properties inside the pre-deploy/post-deploy folder. Since changes can be deployed multiple times on team/qa/stage servers so status check will happen only in production release job.
-	D. If prod job & status is not completed OR non-prod job then run sql files one by one in following steps
+	C. Look for the release version folder(pre-deploy/post-deploy) and run sql files one by one in following steps
 		I. Get file name(ex: GROWTH-1234)
-		II. Check if line exists in status.properties for file name
-			If yes → get the server list where file is already executed and check if current server is already present in list if yes then don’t run the file else run the file and append current server name in server list against file name in status.properties (ex: GROWTH-1234:QA|STAGE)
-			If No → run the file and append current server name in server list against file name in status.properties
-	E. If prod release then add a new line in status.properties with release completed status. (ex: RELEASE:COMPLETED)
+		II. Check if line exists in status.properties for file name based on deploy(pre/post)
+			If yes → get the server list where file is already executed and check if current server is already present in list if yes then don’t run the file else run the file and append current server name in server list against file name in status.txt (ex: PRE_DEPLOY_GROWTH-1234:QA|STAGE|PROD OR POST_DEPLOY_GROWTH-1234:QA|STAGE|PROD)
+			If No → run the sql file and append current server name in server list against file name in status.txt (ex: PRE_DEPLOY_GROWTH-1234:QA|STAGE|PROD OR POST_DEPLOY_GROWTH-1234:QA|STAGE|PROD)
 
 	### These will be 2 types of job for pre-deploy/post-deploy
 	### pre-deploy jobs:
 		database-pre-deploy-custom → TEAM
 			Job params: 
-				release-version : 262
-				branch-name : develop
+				branch-name : custom
+				release-number: custom
 		database-pre-deploy-qa → QA
 			Job params:
 				fixed branch : release
@@ -64,8 +72,8 @@
 	### post-deploy jobs:
 		database-post-deploy-custom → TEAM
 			Job params: 
-				release-version : 262
-				branch-name : develop
+				branch-name : custom
+				release-number: custom
 		database-post-deploy-qa → QA
 			Job params:
 				fixed branch : release
@@ -78,26 +86,26 @@
 			Job params:
 				fixed branch : master
 				release-type: regular/rapid/hotfix
-## Current Release Process:
-	1. Developer creates database jira ticket & tags it with #Database #pre-deploy/#post-deploy
-	2. Ask sysops team to run sql query on QA when it's ready for QA.
-	3. Then sysops runs it on stage/prod based on ticket status.
-	
-## Proposed Release Process:
+				
+## Solution with new git repository and jenkins jobs:
+ ### Summary: To have a git repostory for database changes. developer can add sql file there with PRs and create jenkins jobs to run sql queries on servers. We can run sql queries through shell scripts(done a POC on that) so It should be doable through jenkins jobs as well.
 	1. Regular Release: 
-	   - Check release folder is available or not if not then create folders using database-release-folder-create-custom 
+	   - Check release folder is available or not if not then create folders using jenkins job 
 	   - Create a new branch from develop
 	   - Add sql files in respective pre-deploy/post-deploy under respective release folder
-	   - Get PR approved and merged into develop branch before release cutman on tuesday to include your changes in release
+	   - Get PR approved and merge into develop branch before release cutman on tuesday to include your changes in release
+	   - Use pre-deploy/post-deploy jenkins jobs to execute sql files on server databases.
 	2. Rapid Release:
-	   - Check rapid release folder is available or not if not then create folders using database-release-folder-create-custom  
+	   - Check rapid release folder is available or not if not then create folders using jenkins job  
 	   - create new branch from master
 	   - update rapid-version.properties with your rapid release version
 	   - Add sql files in respective pre-deploy/post-deploy under respective release folder
-	   - Get PR approved and merged in master
-	3. HotFix:
+	   - Get PR approved and merge into master
+	   - Use pre-deploy/post-deploy jenkins jobs to execute sql files on server databases.
+	3. Hot Fix:
 	   - Check hotfix folder is available or not if not then create folders using database-release-folder-create-custom  
 	   - create new branch from master
 	   - update hotfix-version.properties with your hotfix version
 	   - Add sql files in respective pre-deploy/post-deploy under respective release folder
-	   - Get PR approved and merged in master
+	   - Get PR approved and merge into master
+	   - Use pre-deploy/post-deploy jenkins jobs to execute sql files on server databases.
