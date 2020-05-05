@@ -2,10 +2,10 @@
 	database-deploy
 		262
 		262.4
-		week-262
+		262-week
 		263
 		263.2
-		week-263
+		263-week
 		264
 			pre-deploy
 				GROWTH-1234.sql
