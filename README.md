@@ -10,7 +10,7 @@
 	   2. Get PR approved and merge
 	   3. Use pre-deploy/post-deploy jenkins jobs to execute sql files on server databases.
 
-## Code hierarchy example 
+## Code hierarchy example: I have created a sample repo in private repository. please take a look : 
 	database-deploy
 		262
 		262.4
@@ -78,7 +78,6 @@
 				release-number: custom
 				
 ## Solution with new git repository and jenkins jobs:
- ### Summary: To have a git repostory for database changes. developer can add sql file there with PRs and create jenkins jobs to run sql queries on servers. We can run sql queries through shell scripts(done a POC on that) so It should be doable through jenkins jobs as well.
 	1. Regular Release: 
 	   - Check release folder is available or not if not then create folders using jenkins job 
 	   - Create a new branch from develop
