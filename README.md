@@ -88,7 +88,7 @@
 	   - Check release folder is available or not if not then create folders using database-release-folder-create-custom 
 	   - Create a new branch from develop
 	   - Add sql files in respective pre-deploy/post-deploy under respective release folder
-	   - Get PR approved and merged in develop before release cutman on tuesday to include your changes in release
+	   - Get PR approved and merged into develop branch before release cutman on tuesday to include your changes in release
 	2. Rapid Release:
 	   - Check rapid release folder is available or not if not then create folders using database-release-folder-create-custom  
 	   - create new branch from master
